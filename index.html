@@ -7,15 +7,106 @@
     <link rel="apple-touch-icon" href="/icons/icon-192x192.png" /> <!-- Icona per iOS -->
     <link rel="manifest" href="/manifest.json" /> <!-- Link al manifest PWA -->
     <title>Materiali Furgone</title>
-    <!-- Tailwind CSS CDN (se non lo stai includendo tramite build di React) -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Stili aggiuntivi se necessari, ma Tailwind dovrebbe bastare */
+        body {
+            font-family: 'Inter', sans-serif; /* Utilizzo del font Inter */
+        }
+    </style>
 </head>
-<body>
-    <noscript>Devi abilitare JavaScript per eseguire questa app.</noscript>
-    <div id="root"></div>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md text-center border border-gray-200">
+        <!-- Sezione Logo -->
+        <div class="mb-4">
+            <img
+                src="https://github.com/brisicche78/materiali-furgone/blob/main/ducatotpc.png?raw=true"
+                alt="Logo Furgone Ducato"
+                class="mx-auto rounded-full shadow-md border-4 border-blue-200 w-28 h-28 object-contain"
+                onerror="this.onerror=null; this.src='https://placehold.co/112x112/cccccc/333333?text=Logo+Non+Disp.'"
+            />
+        </div>
+
+        <h1 class="text-4xl font-extrabold text-gray-800 mb-6 tracking-tight">
+            Inserisci Nuovo Materiale
+        </h1>
+        <p class="text-lg text-gray-600 mb-8">
+            Il tuo magazzino mobile a portata di mano.
+        </p>
+
+        <div class="mb-6">
+            <label for="barcode" class="block text-left text-gray-700 text-sm font-semibold mb-2">
+                Inserisci o scansiona il Codice a Barre:
+            </label>
+            <input
+                type="text"
+                id="barcode"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 text-lg text-gray-800 placeholder-gray-400 transition duration-200 ease-in-out"
+                placeholder="Es. 1234567890"
+                aria-label="Codice a barre"
+            />
+        </div>
+
+        <!-- Sezione Pulsanti -->
+        <div class="flex flex-col space-y-4">
+            <button
+                id="withdrawButton"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            >
+                Preleva Materiale
+            </button>
+            <button
+                id="insertButton"
+                class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+            >
+                Inserisci Materiale Nuovo
+            </button>
+        </div>
+
+        <!-- Visualizzazione Messaggio Personalizzato -->
+        <div id="messageDisplay" class="mt-4 p-3 bg-blue-100 text-blue-800 rounded-lg text-sm hidden">
+            <!-- Il messaggio verrà inserito qui dal JavaScript -->
+        </div>
+
+        <p class="text-sm text-gray-500 mt-8">
+            Scansiona il codice a barre del materiale per sottrarlo dall'inventario del furgone.
+        </p>
+    </div>
 
     <script>
-        // Registrazione del Service Worker
+        // Funzione per mostrare un messaggio personalizzato
+        function showMessage(msg) {
+            const messageDisplay = document.getElementById('messageDisplay');
+            messageDisplay.textContent = msg;
+            messageDisplay.classList.remove('hidden'); // Rende visibile il div del messaggio
+            setTimeout(() => {
+                messageDisplay.classList.add('hidden'); // Nasconde il div dopo 3 secondi
+            }, 3000);
+        }
+
+        // Gestore per il pulsante "Preleva Materiale"
+        document.getElementById('withdrawButton').addEventListener('click', () => {
+            const barcodeInput = document.getElementById('barcode');
+            const barcodeValue = barcodeInput.value.trim();
+
+            if (barcodeValue === '') {
+                showMessage('Per favore, inserisci un codice a barre.');
+                return;
+            }
+            console.log(`Materiale con codice a barre "${barcodeValue}" prelevato.`);
+            showMessage(`Materiale con codice a barre "${barcodeValue}" prelevato (simulazione).`);
+            barcodeInput.value = ''; // Pulisce l'input
+        });
+
+        // Gestore per il pulsante "Inserisci Materiale Nuovo"
+        document.getElementById('insertButton').addEventListener('click', () => {
+            console.log('Apertura schermata per inserire nuovo materiale...');
+            showMessage('Funzione "Inserisci Materiale Nuovo" attivata (simulazione).');
+            document.getElementById('barcode').value = ''; // Pulisce l'input se necessario
+        });
+
+        // Registrazione del Service Worker (per funzionalità PWA)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js')
@@ -28,7 +119,5 @@
             });
         }
     </script>
-    <!-- Il tuo bundle JavaScript di React verrà caricato qui, solitamente generato dal processo di build -->
-    <!-- Ad esempio: <script src="/static/js/bundle.js"></script> -->
 </body>
 </html>
