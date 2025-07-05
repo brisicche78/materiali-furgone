@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2563eb" /> <!-- Colore della barra di stato del browser -->
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" /> <!-- Icona per iOS -->
+    <link rel="manifest" href="/manifest.json" /> <!-- Link al manifest PWA -->
+    <title>Materiali Furgone</title>
+    <!-- Tailwind CSS CDN (se non lo stai includendo tramite build di React) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <noscript>Devi abilitare JavaScript per eseguire questa app.</noscript>
+    <div id="root"></div>
+
+    <script>
+        // Registrazione del Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registrato con successo:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Registrazione Service Worker fallita:', error);
+                    });
+            });
+        }
+    </script>
+    <!-- Il tuo bundle JavaScript di React verrà caricato qui, solitamente generato dal processo di build -->
+    <!-- Ad esempio: <script src="/static/js/bundle.js"></script> -->
+</body>
+</html>
